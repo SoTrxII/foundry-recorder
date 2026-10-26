@@ -1,0 +1,16 @@
+{
+  "id": "marduk-recorder",
+  "title": "Marduk recorder",
+  "description": "Records the jukebox (playlists and ambient sounds), and optionally the board, of a session recorded by Marduk in Discord.",
+  "version": "0.0.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [{ "name": "SoTrx" }],
+  "esmodules": ["scripts/recorder.js"],
+  "styles": ["styles/recorder.css"],
+  "url": "https://github.com/SoTrxII/foundry-recorder",
+  "manifest": "https://github.com/SoTrxII/foundry-recorder/releases/latest/download/module.json",
+  "download": "https://github.com/SoTrxII/foundry-recorder/releases/latest/download/module.zip"
+}

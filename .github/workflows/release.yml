@@ -1,0 +1,34 @@
+name: Release the module
+
+# A tag is a release: Foundry installs and updates the module from the
+# manifest of the latest one
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The manifest in the repo stays at 0.0.0: the tag is the version, and
+      # each release's download points at its own zip, so an update fetches
+      # exactly the version it announced
+      - name: Stamp the manifest
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          jq --arg v "$tag" --arg d "https://github.com/${GITHUB_REPOSITORY}/releases/download/${tag}/module.zip" \
+            '.version = $v | .download = $d' module.json > module.json.tmp
+          mv module.json.tmp module.json
+          zip -r module.zip module.json scripts styles
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            module.json
+            module.zip

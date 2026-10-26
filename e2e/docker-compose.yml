@@ -1,0 +1,50 @@
+# roll20-audio-sync as deployed (same image, same daprd version as the cluster),
+# with the object store swapped for a local folder so the test can read the
+# result, and a Foundry v14 with the module mounted in
+services:
+  r20:
+    image: ${R20_IMAGE:-sotrx/roll20-audio-sync:1.1.1}
+    environment:
+      OBJECT_STORE_NAME: object-store
+      # The local folder binding stores the bytes it receives as-is
+      OBJECT_STORE_B64: "false"
+      DAPR_GRPC_PORT: "50001"
+    ports:
+      - "8095:8080"
+    # The app exits if the sidecar isn't up yet; it comes back once it is
+    restart: on-failure
+
+  daprd:
+    image: ghcr.io/dapr/daprd:1.18.4
+    command: ["./daprd", "--app-id", "roll20-audio-sync", "--app-port", "8080",
+              "--dapr-grpc-port", "50001", "--resources-path", "/components",
+              "--max-body-size", "100Mi"]
+    volumes:
+      - ./components:/components:ro
+      - ./.out:/out
+    network_mode: "service:r20"
+
+  foundry:
+    image: ghcr.io/felddy/foundryvtt:14
+    # The licence is bound to the hostname
+    hostname: marduk-e2e
+    environment:
+      # Launched at start once it exists: the setup creates it on the first run
+      FOUNDRY_WORLD: e2e
+    ports:
+      - "30000:30000"
+    volumes:
+      # Foundry's download cache, licence and test world: kept between runs
+      - foundry-data:/data
+      # foundry_username, foundry_password, foundry_admin_key: outside the repo
+      - ${FOUNDRY_SECRETS}:/run/secrets/config.json:ro
+      # Outside /data: a mount inside it is created as root, and Foundry, which
+      # runs as node, then fails to create its own folders there. Linked in by
+      # the setup
+      - ../module.json:/mnt/marduk-recorder/module.json:ro
+      - ../scripts:/mnt/marduk-recorder/scripts:ro
+      - ../styles:/mnt/marduk-recorder/styles:ro
+      - ./.build:/mnt/e2e:ro
+
+volumes:
+  foundry-data:
