@@ -41,9 +41,9 @@ services:
       # Outside /data: a mount inside it is created as root, and Foundry, which
       # runs as node, then fails to create its own folders there. Linked in by
       # the setup
-      - ../module.json:/mnt/marduk-recorder/module.json:ro
-      - ../scripts:/mnt/marduk-recorder/scripts:ro
-      - ../styles:/mnt/marduk-recorder/styles:ro
+      - ../module.json:/mnt/lullaby-recorder/module.json:ro
+      - ../scripts:/mnt/lullaby-recorder/scripts:ro
+      - ../styles:/mnt/lullaby-recorder/styles:ro
       - ./.build:/mnt/e2e:ro
 
 volumes:

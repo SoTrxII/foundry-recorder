@@ -14,7 +14,7 @@
  * captured. So no share dialog, only what the jukebox plays (no dice or
  * pings) and only the board (no sidebar or chat).
  */
-const MODULE = "marduk-recorder";
+const MODULE = "lullaby-recorder";
 // 5s of opus is ~80 KB: cheap to retry, and at most 5s lost if the tab dies
 const CHUNK_MS = 5000;
 // Backoff for a failing upload, capped so a long outage resumes quickly

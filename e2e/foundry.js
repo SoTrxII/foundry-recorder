@@ -10,7 +10,7 @@ const RID = 'fvtt-e2e';
 async function join(browser, user) {
   const context = await browser.newContext();
   const page = await context.newPage();
-  page.on('console', (m) => { if (m.text().includes('marduk-recorder')) console.log(`[${user}] ${m.text()}`); });
+  page.on('console', (m) => { if (m.text().includes('lullaby-recorder')) console.log(`[${user}] ${m.text()}`); });
   await page.goto(`${FOUNDRY}/join`);
   await page.selectOption('select[name=userId]', { label: user });
   await page.click('button[name=join]');

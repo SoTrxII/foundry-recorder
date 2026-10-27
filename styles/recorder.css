@@ -1,4 +1,4 @@
-.marduk-recorder {
+.lullaby-recorder {
   gap: 0.25rem;
   padding: 0.5rem;
   margin: 0.25rem 0.5rem;
@@ -7,32 +7,32 @@
   flex: none;
 }
 
-.marduk-recorder h4 {
+.lullaby-recorder h4 {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   margin: 0;
 }
 
-.marduk-recorder p {
+.lullaby-recorder p {
   margin: 0;
 }
 
-.marduk-recorder p:empty {
+.lullaby-recorder p:empty {
   display: none;
 }
 
-.marduk-recorder-dot {
+.lullaby-recorder-dot {
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 50%;
   background: #777;
 }
 
-.marduk-recorder-dot.rec {
+.lullaby-recorder-dot.rec {
   background: #d33;
 }
 
-.marduk-recorder-dot.warn {
+.lullaby-recorder-dot.warn {
   background: #e8a33a;
 }

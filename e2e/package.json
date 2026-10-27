@@ -1,5 +1,5 @@
 {
-  "name": "marduk-recorder-e2e",
+  "name": "lullaby-recorder-e2e",
   "private": true,
   "scripts": {
     "test": "playwright test"

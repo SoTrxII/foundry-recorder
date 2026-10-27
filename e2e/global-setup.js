@@ -80,16 +80,16 @@ async function prepareServer(browser) {
 // a playlist holding the tone, an active scene, a co-GM
 async function prepareWorld(browser) {
   let gm = await join(browser, 'Gamemaster');
-  if (!(await gm.evaluate(() => game.modules.get('marduk-recorder')?.active))) {
+  if (!(await gm.evaluate(() => game.modules.get('lullaby-recorder')?.active))) {
     await gm.evaluate(() => game.settings.set('core', 'moduleConfiguration', {
-      ...game.settings.get('core', 'moduleConfiguration'), 'marduk-recorder': true,
+      ...game.settings.get('core', 'moduleConfiguration'), 'lullaby-recorder': true,
     }));
     await gm.context().close();
     gm = await join(browser, 'Gamemaster');
   }
   await gm.evaluate(async ([endpoint, key]) => {
-    await game.settings.set('marduk-recorder', 'endpoint', endpoint);
-    await game.settings.set('marduk-recorder', 'key', key);
+    await game.settings.set('lullaby-recorder', 'endpoint', endpoint);
+    await game.settings.set('lullaby-recorder', 'key', key);
     if (!game.users.getName('Co-GM')) await User.create({ name: 'Co-GM', role: CONST.USER_ROLES.GAMEMASTER });
     // A soundboard: a sound plays once and stops. In the default mode the
     // playlist starts over at its end, and the tone would never stop
@@ -122,7 +122,7 @@ module.exports = async () => {
   await waitFor('Foundry', 600, async () => (await fetch(FOUNDRY)).status < 500);
   // The module and the tone, mounted outside /data (see docker-compose.yml).
   // The links stay in the volume, so a later start finds the module at once
-  if (!inFoundry('sh', '-c', 'ln -sfn /mnt/marduk-recorder /data/Data/modules/marduk-recorder && ln -sfn /mnt/e2e /data/Data/e2e')) {
+  if (!inFoundry('sh', '-c', 'ln -sfn /mnt/lullaby-recorder /data/Data/modules/lullaby-recorder && ln -sfn /mnt/e2e /data/Data/e2e')) {
     throw new Error('could not link the module into Foundry\'s data');
   }
 

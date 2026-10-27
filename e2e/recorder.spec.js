@@ -13,7 +13,7 @@ const path = require('node:path');
 const { API, RID, join } = require('./foundry');
 
 const TONE_S = 4;
-// The status light's classes, whole: 'rec' alone would match marduk-recorder-dot
+// The status light's classes, whole: 'rec' alone would match lullaby-recorder-dot
 const REC = /(^|\s)rec(\s|$)/;
 const WARN = /(^|\s)warn(\s|$)/;
 const LIT = /(^|\s)(rec|warn)(\s|$)/;
@@ -53,7 +53,7 @@ async function playTone(page) {
     const sound = game.playlists.getName('e2e').sounds.getName('tone');
     if (sound.playing) await sound.update({ playing: false });
     await game.audio.preload(sound.path);
-    const endpoint = game.settings.get('marduk-recorder', 'endpoint');
+    const endpoint = game.settings.get('lullaby-recorder', 'endpoint');
     const t0 = Date.now();
     const { now } = await (await fetch(`${endpoint}/v1/time`)).json();
     const offset = now - (t0 + Date.now()) / 2;
@@ -65,19 +65,19 @@ async function playTone(page) {
 
 async function openPanel(page) {
   await page.locator('#sidebar [data-tab="playlists"]').first().click();
-  const panel = page.locator('section.marduk-recorder');
+  const panel = page.locator('section.lullaby-recorder');
   await expect(panel).toBeVisible();
   return panel;
 }
 
 test('a GM without a session key is told, until it is pasted', async ({ browser }) => {
   let gm = await join(browser, 'Gamemaster');
-  await gm.evaluate(() => game.settings.set('marduk-recorder', 'key', ''));
+  await gm.evaluate(() => game.settings.set('lullaby-recorder', 'key', ''));
   await gm.context().close();
   gm = await join(browser, 'Gamemaster');
   const warning = gm.locator('#notifications .notification.warning', { hasText: 'no session key' });
   await expect(warning).toBeVisible();
-  await gm.evaluate((key) => game.settings.set('marduk-recorder', 'key', key), RID);
+  await gm.evaluate((key) => game.settings.set('lullaby-recorder', 'key', key), RID);
   await expect(warning).toHaveCount(0);
   await gm.context().close();
 });
@@ -91,14 +91,14 @@ test('the jukebox is recorded, aligned on the Discord start, without the interfa
   const reminder = gm.locator('#notifications .notification.warning', { hasText: "not Foundry's jukebox" });
   await expect(reminder).toBeVisible();
   const panel = await openPanel(gm);
-  await expect(panel.locator('.marduk-recorder-dot')).toHaveClass(WARN);
+  await expect(panel.locator('.lullaby-recorder-dot')).toHaveClass(WARN);
   await gm.screenshot({ path: testInfo.outputPath('reminder.png') });
 
-  await panel.locator('.marduk-recorder-picture').uncheck();
+  await panel.locator('.lullaby-recorder-picture').uncheck();
   await panel.getByRole('button', { name: 'Record jukebox' }).click();
-  await expect(panel.locator('.marduk-recorder-status')).toHaveText(/^Recording/);
+  await expect(panel.locator('.lullaby-recorder-status')).toHaveText(/^Recording/);
   await expect(reminder).toBeHidden();
-  await expect(panel.locator('.marduk-recorder-dot')).toHaveClass(REC);
+  await expect(panel.locator('.lullaby-recorder-dot')).toHaveClass(REC);
   await gm.screenshot({ path: testInfo.outputPath('recording.png') });
 
   // The jukebox plays a few seconds into the session
@@ -114,7 +114,7 @@ test('the jukebox is recorded, aligned on the Discord start, without the interfa
   // double the music. No reminder there
   const coGm = await join(browser, 'Co-GM');
   const other = await openPanel(coGm);
-  await expect(other.locator('.marduk-recorder-status')).toHaveText('Recorded from another tab');
+  await expect(other.locator('.lullaby-recorder-status')).toHaveText('Recorded from another tab');
   await expect(coGm.locator('#notifications .notification.warning', { hasText: "not Foundry's jukebox" })).toHaveCount(0);
   await coGm.screenshot({ path: testInfo.outputPath('co-gm.png') });
   await coGm.context().close();
@@ -124,8 +124,8 @@ test('the jukebox is recorded, aligned on the Discord start, without the interfa
   expect(stop.status, await stop.clone().text()).toBe(200);
   expect(await stop.json()).toEqual({ key: `${RID}.ogg` });
   // ...and the module stops by itself on its next chunk (409)
-  await expect(panel.locator('.marduk-recorder-status')).toHaveText(/Session ended/, { timeout: 10_000 });
-  await expect(panel.locator('.marduk-recorder-dot')).not.toHaveClass(LIT);
+  await expect(panel.locator('.lullaby-recorder-status')).toHaveText(/Session ended/, { timeout: 10_000 });
+  await expect(panel.locator('.lullaby-recorder-dot')).not.toHaveClass(LIT);
   await gm.context().close();
 
   const span = toneSpan(path.join(__dirname, '.out', `${RID}.ogg`));
@@ -155,10 +155,10 @@ test('with the board, the picture is recorded too, in sync with its sound', asyn
     canvas.stage.addChild(screen);
   });
   const panel = await openPanel(gm);
-  const box = panel.locator('.marduk-recorder-picture');
+  const box = panel.locator('.lullaby-recorder-picture');
   await box.check();
   await panel.getByRole('button', { name: 'Record jukebox' }).click();
-  await expect(panel.locator('.marduk-recorder-status')).toHaveText(/^Recording/);
+  await expect(panel.locator('.lullaby-recorder-status')).toHaveText(/^Recording/);
   await expect(box, 'it applies from the next start').toBeDisabled();
 
   await gm.waitForTimeout(3000);
@@ -169,7 +169,7 @@ test('with the board, the picture is recorded too, in sync with its sound', asyn
   const stop = await post('/v1/jukeboxsyncer/stop', { id: RID });
   expect(stop.status, await stop.clone().text()).toBe(200);
   expect(await stop.json()).toEqual({ key: `video/${RID}.mkv` });
-  await expect(panel.locator('.marduk-recorder-status')).toHaveText(/Session ended/, { timeout: 10_000 });
+  await expect(panel.locator('.lullaby-recorder-status')).toHaveText(/Session ended/, { timeout: 10_000 });
   await box.uncheck();
   await gm.context().close();
 
