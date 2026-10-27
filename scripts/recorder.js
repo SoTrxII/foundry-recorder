@@ -83,7 +83,7 @@ Hooks.once("ready", () => {
   // reminder never fires: only a disabled button in a tab the GM may never open
   if (!recorder.key) {
     recorder.noKey = ui.notifications.warn(
-      "Marduk recorder: no session key. Paste the one Velvet shows (/campaign show, or /session start for a one-shot) in the module settings.",
+      "Lullaby: no session key. Paste the one Velvet shows (/campaign show, or /session start for a one-shot) in the module settings.",
       { permanent: true },
     );
   }
@@ -120,7 +120,7 @@ class Recorder {
     this.panel = document.createElement("section");
     this.panel.className = `${MODULE} flexcol`;
     this.panel.innerHTML = `
-      <h4><span class="${MODULE}-dot"></span>Marduk recorder</h4>
+      <h4><span class="${MODULE}-dot"></span>Lullaby</h4>
       <button type="button" class="${MODULE}-toggle"></button>
       <label><input type="checkbox" class="${MODULE}-picture" /> Also record the board</label>
       <p class="${MODULE}-status"></p>

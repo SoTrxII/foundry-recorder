@@ -1,4 +1,4 @@
-# Marduk recorder (Foundry VTT module)
+# Lullaby (Foundry VTT module)
 
 Records a Foundry game's jukebox (playlists and ambient sounds) and, when the GM
 asks for it, the board, while Marduk records the session's voices in Discord. The
@@ -13,8 +13,8 @@ same upload protocol.
 1. In Foundry's setup screen, *Add-on Modules → Install Module*, paste the
    manifest URL:
    `https://github.com/SoTrxII/foundry-recorder/releases/latest/download/module.json`
-2. Enable *Marduk recorder* in the world (*Manage Modules*).
-3. In *Configure Settings → Marduk recorder*, paste the campaign's session key,
+2. Enable *Lullaby* in the world (*Manage Modules*).
+3. In *Configure Settings → Lullaby*, paste the campaign's session key,
    shown by Velvet in `/campaign show` (for a one-shot, by `/session start`).
 4. Each session: `/session start` in Discord, then **Record jukebox** at the top
    of the Playlists tab. A notification reminds you if you forget. It stops by

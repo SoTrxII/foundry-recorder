@@ -1,6 +1,6 @@
 {
   "id": "marduk-recorder",
-  "title": "Marduk recorder",
+  "title": "Lullaby",
   "description": "Records the jukebox (playlists and ambient sounds), and optionally the board, of a session recorded by Marduk in Discord.",
   "version": "0.0.0",
   "compatibility": {
