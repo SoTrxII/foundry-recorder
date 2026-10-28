@@ -67,7 +67,7 @@ Hooks.once("init", () => {
     scope: "user",
     config: false,
     type: Boolean,
-    default: false,
+    default: true,
   });
 });
 
@@ -122,7 +122,7 @@ class Recorder {
     this.panel.innerHTML = `
       <h4><span class="${MODULE}-dot"></span>Lullaby</h4>
       <button type="button" class="${MODULE}-toggle"></button>
-      <label><input type="checkbox" class="${MODULE}-picture" /> Also record the board</label>
+      <label><input type="checkbox" class="${MODULE}-picture" /> Also record the game board</label>
       <p class="${MODULE}-status"></p>
       <p class="${MODULE}-hint hint"></p>`;
     this.button = this.panel.querySelector(`.${MODULE}-toggle`);

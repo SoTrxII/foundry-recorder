@@ -21,7 +21,7 @@ same upload protocol.
    itself at `/session end`.
 
 Keep the tab open: closing or reloading Foundry stops the recording (it resumes
-with a click). Tick *Also record the board* to have the board in the video: it
+with a click). *Also record the game board* is ticked by default; untick it for audio only. With it, the board is in the video: it
 is recorded **as you see it**, hidden tokens and GM drawings included, and at
 about 2 frames a second while the tab is in the background.
 

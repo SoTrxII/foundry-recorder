@@ -94,6 +94,8 @@ test('the jukebox is recorded, aligned on the Discord start, without the interfa
   await expect(panel.locator('.lullaby-recorder-dot')).toHaveClass(WARN);
   await gm.screenshot({ path: testInfo.outputPath('reminder.png') });
 
+  // The world keeps the GM's last choice between runs: the registered default is what a new GM gets
+  expect(await gm.evaluate(() => game.settings.settings.get('lullaby-recorder.picture').default), 'ticked by default, like Roll20').toBe(true);
   await panel.locator('.lullaby-recorder-picture').uncheck();
   await panel.getByRole('button', { name: 'Record jukebox' }).click();
   await expect(panel.locator('.lullaby-recorder-status')).toHaveText(/^Recording/);
