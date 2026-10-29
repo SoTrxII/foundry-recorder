@@ -48,7 +48,7 @@ while it is being recorded.
 
 ## Testing
 
-`e2e/` runs Foundry v14 ([felddy/foundryvtt](https://github.com/felddy/foundryvtt-docker))
+`e2e/` runs Foundry v14, or v12/v13 with `FOUNDRY_VERSION` ([felddy/foundryvtt](https://github.com/felddy/foundryvtt-docker))
 with the module mounted in, roll20-audio-sync as deployed, and Chrome through
 Playwright. It checks that a GM without a key is warned, plays a tone through a playlist, and checks it lands in the
 recording where it was played, that an interface sound does not, that a co-GM
@@ -67,6 +67,7 @@ cd e2e
 npm install
 npx playwright test               # the first run downloads Foundry (~200 MB)
 KEEP_STACK=1 npx playwright test  # keep the containers for `docker compose logs`
+FOUNDRY_VERSION=12 FOUNDRY_PORT=30012 npx playwright test  # an older Foundry, beside one on 30000
 ```
 
 **It plays beeps.** Local only: it needs the licence, so not in CI. The

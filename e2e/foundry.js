@@ -1,5 +1,6 @@
 // What the tests and the setup share: the stack's addresses and joining the world
-const FOUNDRY = 'http://localhost:30000';
+// FOUNDRY_PORT when 30000 is taken, by a Foundry of one's own
+const FOUNDRY = `http://localhost:${process.env.FOUNDRY_PORT ?? 30000}`;
 const API = 'http://127.0.0.1:8095';
 // What the module calls from Foundry's page: the CORS proxy in front of API
 const ENDPOINT = 'http://localhost:8096/api';
@@ -12,7 +13,8 @@ async function join(browser, user) {
   const page = await context.newPage();
   page.on('console', (m) => { if (m.text().includes('lullaby-recorder')) console.log(`[${user}] ${m.text()}`); });
   await page.goto(`${FOUNDRY}/join`);
-  await page.selectOption('select[name=userId]', { label: user });
+  // userId on v14, userid on v12
+  await page.selectOption('select[name=userId i]', { label: user });
   await page.click('button[name=join]');
   await page.waitForFunction(() => window.game?.ready, null, { timeout: 60_000 });
   // Foundry creates its AudioContexts on the first gesture

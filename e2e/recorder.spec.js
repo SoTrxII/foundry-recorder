@@ -2,7 +2,7 @@
 // recording that roll20-audio-sync uploads, at the right place on the Discord
 // timeline.
 //
-// Real parts: Foundry v14 with the module, a playlist played as the GM plays
+// Real parts: Foundry (v12 to v14) with the module, a playlist played as the GM plays
 // one, Chrome's MediaRecorder, the published roll20-audio-sync image and its
 // daprd sidecar, the ffmpeg mix. Stand-ins: a 440 Hz tone instead of music,
 // the test instead of record-orchestrator (start/stop), a local folder instead

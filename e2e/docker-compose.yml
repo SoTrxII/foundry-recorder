@@ -1,6 +1,6 @@
 # roll20-audio-sync as deployed (same image, same daprd version as the cluster),
 # with the object store swapped for a local folder so the test can read the
-# result, and a Foundry v14 with the module mounted in
+# result, and a Foundry (v14 by default) with the module mounted in
 services:
   r20:
     image: ${R20_IMAGE:-sotrx/roll20-audio-sync:1.1.1}
@@ -25,14 +25,17 @@ services:
     network_mode: "service:r20"
 
   foundry:
-    image: ghcr.io/felddy/foundryvtt:14
+    # FOUNDRY_VERSION=12 or 13 runs the suite on an older Foundry, in a volume of
+    # its own: a world opened by a newer Foundry is migrated and cannot be
+    # opened by an older one
+    image: ghcr.io/felddy/foundryvtt:${FOUNDRY_VERSION:-14}
     # The licence is bound to the hostname
     hostname: marduk-e2e
     environment:
       # Launched at start once it exists: the setup creates it on the first run
       FOUNDRY_WORLD: e2e
     ports:
-      - "30000:30000"
+      - "${FOUNDRY_PORT:-30000}:30000"
     volumes:
       # Foundry's download cache, licence and test world: kept between runs
       - foundry-data:/data
@@ -48,3 +51,4 @@ services:
 
 volumes:
   foundry-data:
+    name: e2e_foundry-data${FOUNDRY_VERSION:+-v${FOUNDRY_VERSION}}

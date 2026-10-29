@@ -68,7 +68,9 @@ async function prepareServer(browser) {
       await waitFor('the game system', 120, () => inFoundry('test', '-f', `/data/Data/systems/${SYSTEM}/system.json`));
     }
     if (!inFoundry('test', '-d', `/data/Data/worlds/${WORLD}`)) {
-      await setup(page, '/create', { action: 'createWorld', id: WORLD, title: 'Marduk e2e', system: SYSTEM });
+      // v14 takes it on /create, v12 and v13 on /setup with the rest
+      const route = Number(process.env.FOUNDRY_VERSION ?? 14) >= 14 ? '/create' : '/setup';
+      await setup(page, route, { action: 'createWorld', id: WORLD, title: 'Marduk e2e', system: SYSTEM });
     }
     await setup(page, '/setup', { action: 'launchWorld', world: WORLD });
     await waitFor('the world', 60, async () => (await fetch(`${FOUNDRY}/join`)).ok);
@@ -122,7 +124,10 @@ module.exports = async () => {
   await waitFor('Foundry', 600, async () => (await fetch(FOUNDRY)).status < 500);
   // The module and the tone, mounted outside /data (see docker-compose.yml).
   // The links stay in the volume, so a later start finds the module at once
-  if (!inFoundry('sh', '-c', 'ln -sfn /mnt/lullaby-recorder /data/Data/modules/lullaby-recorder && ln -sfn /mnt/e2e /data/Data/e2e')) {
+  // Owned by Foundry's user: the v12 image chowns whatever in /data is not,
+  // following links, and a link into a read-only mount stopped it from booting
+  if (!inFoundry('sh', '-c', 'cd /data/Data && ln -sfn /mnt/lullaby-recorder modules/lullaby-recorder && ln -sfn /mnt/e2e e2e'
+    + ' && chown -h "$(stat -c %u:%g .)" modules/lullaby-recorder e2e')) {
     throw new Error('could not link the module into Foundry\'s data');
   }
 
